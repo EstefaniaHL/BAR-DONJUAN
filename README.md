@@ -10,8 +10,8 @@ Technologies:
 
 ## Frontend: HTML, CSS, JavaScript.
 Data Storage: LocalStorage (for this MVP version).
-Future Enhancements:
 
+## Future Enhancements:
 Integrating a database for persistent data storage.
 Adding user authentication and roles.
 Generating detailed reports with visual charts.
