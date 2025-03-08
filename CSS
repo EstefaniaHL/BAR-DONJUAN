@@ -1,0 +1,77 @@
+/* General Styles */
+body {
+    background-color: black;
+    color: white;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Header */
+.header {
+    text-align: center;
+    padding: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    border-bottom: 2px solid #d4af37; /* Mostaza */
+}
+
+/* Bar Selection */
+.bar-selection {
+    text-align: center;
+    margin: 20px;
+}
+
+select {
+    background-color: #222;
+    color: white;
+    padding: 10px;
+    border: 1px solid #d4af37;
+}
+
+/* Transaction Form */
+.transaction-form {
+    text-align: center;
+    margin: 20px;
+}
+
+input, select, button {
+    margin: 5px;
+    padding: 10px;
+    border: none;
+}
+
+button {
+    background-color: #d4af37;
+    color: black;
+    cursor: pointer;
+}
+
+/* Transaction Table */
+.transaction-table {
+    margin: 20px auto;
+    width: 80%;
+    text-align: center;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background-color: #d4af37;
+    color: black;
+}
+
+td, th {
+    padding: 10px;
+    border: 1px solid white;
+}
+
+/* Balance Summary */
+.balance-summary {
+    text-align: center;
+    padding: 20px;
+    border-top: 2px solid #d4af37;
+}
