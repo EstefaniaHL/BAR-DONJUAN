@@ -1,81 +1,44 @@
-// Selección de elementos del DOM
-const barSelector = document.getElementById("barSelector");
-const transactionForm = document.getElementById("transactionForm");
-const amountInput = document.getElementById("amount");
-const categoryInput = document.getElementById("category");
-const dateInput = document.getElementById("date");
-const transactionList = document.getElementById("transactionList");
-const totalIncome = document.getElementById("totalIncome");
-const totalExpense = document.getElementById("totalExpense");
-const netBalance = document.getElementById("netBalance");
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("movement-form");
+    const tableBody = document.getElementById("movement-table-body");
+    const balanceSummary = document.getElementById("balance-summary");
 
-// Obtener transacciones del LocalStorage
-type Transactions = { amount: number; category: string; date: string };
-const getTransactions = (): Transactions[] => {
-    const transactions = localStorage.getItem("transactions");
-    return transactions ? JSON.parse(transactions) : [];
-};
+    let totalBalance = 0;
 
-// Guardar transacciones en LocalStorage
-const saveTransactions = (transactions: Transactions[]) => {
-    localStorage.setItem("transactions", JSON.stringify(transactions));
-};
+    form.addEventListener("submit", function (event) {
+        event.preventDefault(); // 🔴 Evita que la página se recargue
 
-// Agregar transacción
-type AddTransaction = (amount: number, category: string, date: string) => void;
-const addTransaction: AddTransaction = (amount, category, date) => {
-    const transactions = getTransactions();
-    transactions.push({ amount, category, date });
-    saveTransactions(transactions);
-    renderTransactions();
-};
+        // Obtener los valores del formulario
+        const bar = document.getElementById("bar-select").value;
+        const amount = parseFloat(document.getElementById("amount").value);
+        const category = document.getElementById("category").value;
+        const date = document.getElementById("date").value;
 
-// Eliminar transacción
-type DeleteTransaction = (index: number) => void;
-const deleteTransaction: DeleteTransaction = (index) => {
-    const transactions = getTransactions();
-    transactions.splice(index, 1);
-    saveTransactions(transactions);
-    renderTransactions();
-};
+        // Validar que el monto sea un número válido
+        if (isNaN(amount) || amount <= 0) {
+            alert("Por favor, ingresa un monto válido.");
+            return;
+        }
 
-// Renderizar transacciones en la tabla
-const renderTransactions = () => {
-    const transactions = getTransactions();
-    transactionList.innerHTML = "";
-    let incomeTotal = 0;
-    let expenseTotal = 0;
-    transactions.forEach((transaction, index) => {
+        // Agregar movimiento a la tabla
         const row = document.createElement("tr");
         row.innerHTML = `
-            <td>$${transaction.amount}</td>
-            <td>${transaction.category === "income" ? "Ingreso" : "Gasto"}</td>
-            <td>${transaction.date}</td>
-            <td><button onclick="deleteTransaction(${index})">Eliminar</button></td>
+            <td>${bar}</td>
+            <td>$${amount.toFixed(2)}</td>
+            <td>${category === "income" ? "Ingreso" : "Egreso"}</td>
+            <td>${date}</td>
         `;
-        transactionList.appendChild(row);
-        if (transaction.category === "income") {
-            incomeTotal += transaction.amount;
+        tableBody.appendChild(row);
+
+        // Actualizar balance
+        if (category === "income") {
+            totalBalance += amount;
         } else {
-            expenseTotal += transaction.amount;
+            totalBalance -= amount;
         }
+        balanceSummary.textContent = `Balance: $${totalBalance.toFixed(2)}`;
+
+        // Limpiar el formulario después de agregar el movimiento
+        form.reset();
     });
-    totalIncome.textContent = `$${incomeTotal}`;
-    totalExpense.textContent = `$${expenseTotal}`;
-    netBalance.textContent = `$${incomeTotal - expenseTotal}`;
-};
-
-// Evento de envío del formulario
-transactionForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-    const amount = parseFloat(amountInput.value);
-    const category = categoryInput.value;
-    const date = dateInput.value;
-    if (amount > 0 && date) {
-        addTransaction(amount, category, date);
-        transactionForm.reset();
-    }
 });
-
-// Renderizar las transacciones al cargar la página
-renderTransactions();
